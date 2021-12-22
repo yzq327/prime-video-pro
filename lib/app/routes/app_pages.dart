@@ -4,6 +4,8 @@ import '../modules/detail/bindings/detail_binding.dart';
 import '../modules/detail/views/detail_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/main/bindings/main_binding.dart';
+import '../modules/main/views/main_view.dart';
 import '../modules/mine/bindings/mine_binding.dart';
 import '../modules/mine/views/mine_view.dart';
 import '../modules/mineAbout/bindings/mine_about_binding.dart';
@@ -28,7 +30,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.MAIN;
 
   static final routes = [
     GetPage(
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.MINE_WEB,
       page: () => MineWebView(),
       binding: MineWebBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAIN,
+      page: () => MainView(),
+      binding: MainBinding(),
     ),
   ];
 }

@@ -14,6 +14,7 @@ abstract class Routes {
   static const MINE_COLLECTION_DETAIL = _Paths.MINE_COLLECTION_DETAIL;
   static const MINE_ACTIVITIES = _Paths.MINE_ACTIVITIES;
   static const MINE_WEB = _Paths.MINE_WEB;
+  static const MAIN = _Paths.MAIN;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const MINE_COLLECTION_DETAIL = '/mine-collection-detail';
   static const MINE_ACTIVITIES = '/mine-activities';
   static const MINE_WEB = '/mine-web';
+  static const MAIN = '/main';
 }
