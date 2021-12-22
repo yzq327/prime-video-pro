@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 class MainController extends GetxController {
   //TODO: Implement MainController
   var currentIndex = 0.obs;
-  var stackIndex = 0;
+  var  stackIndex = 0;
 
   @override
   void onInit() {

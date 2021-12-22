@@ -45,7 +45,7 @@ class MainView extends GetView<MainController> {
       appBar: null,
       body: GetBuilder<MainController>(builder: (main) {
         return IndexedStack(
-          index: main.stackIndex.toInt(),
+          index: main.stackIndex,
           children: _buildIndexedStack(),
         );
       },),
@@ -55,7 +55,7 @@ class MainView extends GetView<MainController> {
             elevation: 0.0,
             iconSize: FontSizes.fontSize26,
             type: BottomNavigationBarType.fixed,
-            currentIndex: main.stackIndex.toInt(),
+            currentIndex: main.stackIndex,
             onTap: controller.onItemTapped,
             items: _getBottomNavigationList
                 .asMap()
@@ -77,7 +77,7 @@ class MainView extends GetView<MainController> {
               padding: EdgeInsets.symmetric(vertical: SpaceData.spaceSizeHeight16),
               child: GetBuilder<MainController>(builder: (main) {
                   return Icon(_getBottomNavigationList[index].icon,
-                      color: main.stackIndex.toInt() == index
+                      color: main.stackIndex == index
                           ? SystemColors.hoverThemeBgColor
                           : SystemColors.subTextColor);
                 }
