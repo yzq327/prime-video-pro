@@ -16,5 +16,7 @@ class SearchController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+  void increment(index) {
+    count.value= index;
+  }
 }

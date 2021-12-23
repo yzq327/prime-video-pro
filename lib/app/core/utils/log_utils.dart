@@ -1,5 +1,5 @@
 
-import 'package:prime_video_pro/app/core/http/http_options.dart';
+import 'package:prime_video_pro/app/data/provider/http_options.dart';
 
 class LogUtils {
   static void _print(String msg) {

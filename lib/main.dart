@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:prime_video_pro/app/core/values/colors.dart';
+import 'package:prime_video_pro/app/data/provider/dio_http_provider.dart';
+import 'package:prime_video_pro/app/data/provider/http_provider.dart';
+import 'package:prime_video_pro/app/data/service/video_service.dart';
 
 import 'app/core/values/languages.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
+  inject();
   runApp(
     GetMaterialApp(
       title: "Application",
@@ -21,4 +25,9 @@ void main() {
       translationsKeys: AppTranslation.translations,
     ),
   );
+}
+
+void inject() {
+  Get.lazyPut<HttpProvider>(() => DioHttpProvider());
+  Get.lazyPut(() => VideoService());
 }

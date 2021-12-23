@@ -12,11 +12,28 @@ class SearchView extends GetView<SearchController> {
         title: Text('SearchView'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Text(
-          'SearchView is working',
-          style: TextStyle(fontSize: 20),
-        ),
+      body: Column(
+        children: [
+          Center(
+            child: Obx(
+              () {
+                return Text(controller.count.value.toString(),
+                    style: TextStyle(fontSize: 20));
+              },
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              controller.increment(4);
+            },
+            child: Container(
+              child: Text(
+                '修改值',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

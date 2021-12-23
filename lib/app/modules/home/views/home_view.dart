@@ -7,8 +7,7 @@ import 'package:prime_video_pro/app/core/values/colors.dart';
 import 'package:prime_video_pro/app/core/values/font_size.dart';
 import 'package:prime_video_pro/app/core/values/space_data.dart';
 import 'package:prime_video_pro/app/modules/home/local_widgets/stub_tab_indicator.dart';
-import 'package:prime_video_pro/app/modules/home/local_widgets/tab_content.dart';
-import 'package:prime_video_pro/app/modules/mineAbout/views/mine_about_view.dart';
+import 'package:prime_video_pro/app/modules/home/local_widgets/tab_view/tab_content.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -40,34 +39,31 @@ class HomeView extends GetView<HomeController> {
           ],
         ),
       ),
-      body: GetBuilder<HomeController>(builder: (home) {
-          return Column(children: [
-            Container(
-              padding: EdgeInsets.only(bottom: SpaceData.spaceSizeHeight16),
-              color: SystemColors.themeBgColor,
-              child: TabBar(
-                controller: home.tabController,
-                padding: EdgeInsets.symmetric(horizontal: SpaceData.spaceSizeWidth16),
-                labelStyle: TextStyle(fontSize: FontSizes.fontSize20),
-                unselectedLabelStyle: TextStyle(fontSize: FontSizes.fontSize20),
-                isScrollable: true,
-                labelPadding: EdgeInsets.all(0),
-                labelColor: SystemColors.hoverTextColor,
-                unselectedLabelColor: SystemColors.primaryColor,
-                indicatorWeight: 0.0,
-                indicator: StubTabIndicator(color:SystemColors.hoverThemeBgColor),
-                tabs: home.getTypeList.map((e) => _buildTab(e)).toList(),
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: home.tabController,
-                children: home.getTypeList.map((e) => TabContent()).toList(),
-              ),
-            )
-          ]);
-        },
-      ),
+      body: Column(children: [
+        Container(
+          padding: EdgeInsets.only(bottom: SpaceData.spaceSizeHeight16),
+          color: SystemColors.themeBgColor,
+          child: Obx(() => TabBar(
+            controller: controller.tabController,
+            padding: EdgeInsets.symmetric(horizontal: SpaceData.spaceSizeWidth16),
+            labelStyle: TextStyle(fontSize: FontSizes.fontSize20),
+            unselectedLabelStyle: TextStyle(fontSize: FontSizes.fontSize20),
+            isScrollable: true,
+            labelPadding: EdgeInsets.all(0),
+            labelColor: SystemColors.hoverTextColor,
+            unselectedLabelColor: SystemColors.primaryColor,
+            indicatorWeight: 0.0,
+            indicator: StubTabIndicator(color:SystemColors.hoverThemeBgColor),
+            tabs: controller.getTypeList.map((e) => _buildTab(e)).toList(),
+          )),
+        ),
+        Expanded(
+          child: Obx(() => TabBarView(
+            controller: controller.tabController,
+            children: controller.tabContentControllerList.map((controller) => TabContent(controller: controller)).toList(),
+          )),
+        )
+      ]),
     );
   }
 }

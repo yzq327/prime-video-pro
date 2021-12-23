@@ -3,8 +3,6 @@ import 'package:dio/dio.dart';
 
 
 class HttpOptions {
-  static Dio dio = new Dio(HttpOptions.getInstance);
-
   static BaseOptions _options = BaseOptions(
     baseUrl: HttpOptions.baseUrl,
     connectTimeout: HttpOptions.connectTimeout,
