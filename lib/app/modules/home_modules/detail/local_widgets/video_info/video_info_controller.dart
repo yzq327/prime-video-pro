@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:prime_video_pro/app/core/values/assets_data.dart';
 import 'package:prime_video_pro/app/core/values/constants.dart';
@@ -12,23 +11,8 @@ import 'package:prime_video_pro/app/data/table/table_init.dart';
 import 'package:prime_video_pro/app/global_widgets/common_dialog.dart';
 import 'package:prime_video_pro/app/global_widgets/common_toast.dart';
 import 'package:prime_video_pro/app/global_widgets/coomom_video_player.dart';
-import 'package:prime_video_pro/app/modules/home_modules/detail/local_widgets/video_info/video_info_content.dart';
-import 'package:rive/rive.dart';
 
-class VideoDetailPageParams {
-  final int vodId;
-  final String vodName;
-  final String vodPic;
-  final int watchedDuration;
-
-  VideoDetailPageParams(
-      {required this.vodId,
-        this.vodName = '',
-        this.vodPic = '',
-        this.watchedDuration = 0});
-}
-
-class DetailController extends GetxController with GetTickerProviderStateMixin  {
+class DetailController extends GetxController {
   //TODO: Implement DetailController
 
   final VideoService _videoService = Get.find();
@@ -52,14 +36,6 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
 
   late VideoDetailPageParams videoDetailPageParams;
 
-  final RxBool reverse = false.obs;
-  final RxInt currentIndex = 0.obs;
-
-  RiveAnimationController? _controller1;
-  RiveAnimationController? _controller2;
-  Artboard? artboard;
-
-
   // bool get isFullScreen =>
   //     MediaQuery.of(context).orientation == Orientation.landscape
 
@@ -67,7 +43,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
     return MediaQuery.of(context).orientation == Orientation.landscape;
   }
 
-  void playWithIndex(int index) {
+  void _playWithIndex(int index) {
     videoUrl = urlInfo![index][1];
     currentEpo = urlInfo![index][0];
   }
@@ -83,14 +59,6 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
     userEtController.addListener(() {
       // setState(() {});
     });
-
-    rootBundle.load('assets/riv/collect.riv').then((data) {
-      final file = RiveFile.import(data);
-      final tempArtboard = file.mainArtboard;
-      tempArtboard.addController(SimpleAnimation(
-          isCollected.value ? 'idle_selected' : 'idle_unselected'));
-      artboard = tempArtboard;
-    });
   }
 
   void _getVideoDetailById() async {
@@ -103,7 +71,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
     String vodPlayUrl = getVideoDetail.vodPlayUrl;
     if (vodPlayUrl.isNotEmpty) {
       urlInfo = vodPlayUrl.split('#').map((e) => e.split('\$')).toList();
-      playWithIndex(0);
+      _playWithIndex(0);
     }
     isPageLoading.value = false;
     print('getVideoDetail-------${getVideoDetail.vodName}');
@@ -272,10 +240,10 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
     await dbUtil.close();
   }
 
-  void handleOnCollect(context) {
-    if (!isCollected.value) {
+  void handleOnCollect(bool value, context) {
+    if (value) {
       queryCollectionData();
-      showSheet.value = !isCollected.value;
+      showSheet.value = value;
     } else {
       CommonDialog.showAlertDialog(context,
           title: '提示',
@@ -286,9 +254,6 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
 
   void setShowSSheet(value) => showSheet.value = value;
 
-  void setReverse() => reverse.value = !reverse.value;
-  void setCurrentIndex(index) => currentIndex.value = index;
-
 
   @override
   void onReady() {
@@ -296,40 +261,5 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
   }
 
   @override
-  void onClose() {
-    super.onClose();
-    _controller1?.dispose();
-    _controller2?.dispose();
-  }
-
-
-  void _togglePlay() {
-    if (isCollected.value) {
-      doSelect();
-    } else {
-      doUnSelect();
-    }
-  }
-
-  void doSelect() {
-    if (_controller1 != null) {
-      artboard?.removeController(_controller1!);
-    }
-    _controller1 = SimpleAnimation('selected');
-    artboard?.addController(_controller1!);
-  }
-
-  void doUnSelect() {
-    if (_controller2 != null) {
-      artboard?.removeController(_controller2!);
-    }
-    _controller2 = SimpleAnimation('unselected');
-    artboard?.addController(_controller2!);
-  }
-
-  // void didUpdateWidget(covariant VideoInfoContent oldWidget) {
-  //   if (widget.isCollected != oldWidget.isCollected) {
-  //     _togglePlay();
-  //   }
-  // }
+  void onClose() {}
 }
