@@ -1,8 +1,7 @@
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:prime_video_pro/app/core/utils/log_utils.dart';
-import 'http_options.dart';
+import '../../data/provider/http_options.dart';
 
 class HttpUtil {
   static void urlPrint(String url,

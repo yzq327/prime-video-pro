@@ -22,21 +22,22 @@ class TabContentController extends GetxController {
 
   void startTimer() {
     timer = new Timer.periodic(Duration(seconds: 3), (_) {
-      currentIndex.value ++;
-      pageController.animateToPage(currentIndex.value,
-          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+      if (pageController.hasClients) {
+        currentIndex.value++;
+        pageController.animateToPage(currentIndex.value,
+            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+      }
     });
   }
 
   void updateCurrentIndex(index) {
-    currentIndex.value =  index;
+    currentIndex.value = index;
   }
-
 
   @override
   onClose() {
     refreshController.dispose();
-    if(videoList.length > 1) {
+    if (videoList.length > 1) {
       timer.cancel();
     }
   }
@@ -60,8 +61,6 @@ class TabContentController extends GetxController {
   void onLoading() async {
     currentPage = currentPage + 1;
     await getVideoTypeDetailList();
-
-
     refreshController.loadComplete();
   }
 
@@ -72,7 +71,7 @@ class TabContentController extends GetxController {
       'pg': currentPage,
     };
     isLoading.value = true;
-    VideoListModel model  = await _videoService.getVideoList(params);
+    VideoListModel model = await _videoService.getVideoList(params);
     if (model.list.length > 0) {
       total = model.total;
       if (currentPage == 1) {
@@ -80,7 +79,7 @@ class TabContentController extends GetxController {
       } else {
         videoList.addAll(model.list);
       }
-      if(videoList.length > 1) {
+      if (videoList.length > 1) {
         WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
           startTimer();
         });

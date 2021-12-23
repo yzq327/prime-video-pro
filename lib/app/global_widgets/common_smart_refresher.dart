@@ -72,8 +72,10 @@ class _CommonSmartRefresherState extends State<CommonSmartRefresher> {
         Widget body;
         String text;
         if (mode == LoadStatus.loading) {
-          body = CircularProgressIndicator(
-              strokeWidth: 2.0, color: SystemColors.hoverThemeBgColor);
+          body = Center(
+            child: CircularProgressIndicator(
+                strokeWidth: 2.0, color: SystemColors.hoverThemeBgColor),
+          );
         } else {
           if (mode == LoadStatus.idle) {
             text = '上拉加载更多';

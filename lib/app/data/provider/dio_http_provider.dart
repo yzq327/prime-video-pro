@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:prime_video_pro/app/data/provider/http_options.dart';
 import 'package:prime_video_pro/app/data/provider/http_provider.dart';
 
-import 'http_util.dart';
+import '../../core/utils/http_util.dart';
 
 class DioHttpProvider implements HttpProvider {
   final Dio _dio = new Dio(HttpOptions.getInstance);

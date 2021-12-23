@@ -6,6 +6,7 @@ import 'package:prime_video_pro/app/core/values/colors.dart';
 import 'package:prime_video_pro/app/core/values/space_data.dart';
 import 'package:prime_video_pro/app/global_widgets/common_hint_text_contain.dart';
 import 'package:prime_video_pro/app/global_widgets/common_smart_refresher.dart';
+import 'package:prime_video_pro/app/modules/home/local_widgets/tab_view/recent_video_container.dart';
 import 'package:prime_video_pro/app/modules/home/local_widgets/tab_view/tab_content_controller.dart';
 import 'package:prime_video_pro/app/modules/home/local_widgets/tab_view/video_swiper.dart';
 
@@ -26,7 +27,7 @@ class TabContent extends StatelessWidget {
           ? ListView(
         children: [
           VideoSwiper(controller: controller),
-          // RecentVideoContainer(videoList: getVideoList),
+          RecentVideoContainer(controller: controller),
           Container(
             height: SpaceData.spaceSizeHeight60,
             alignment: Alignment.center,
