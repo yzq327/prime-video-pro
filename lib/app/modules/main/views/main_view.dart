@@ -6,9 +6,9 @@ import 'package:prime_video_pro/app/core/values/colors.dart';
 import 'package:prime_video_pro/app/core/values/font_icon.dart';
 import 'package:prime_video_pro/app/core/values/font_size.dart';
 import 'package:prime_video_pro/app/core/values/space_data.dart';
-import 'package:prime_video_pro/app/modules/home/views/home_view.dart';
-import 'package:prime_video_pro/app/modules/mine/views/mine_view.dart';
-import 'package:prime_video_pro/app/modules/search/views/search_view.dart';
+import 'package:prime_video_pro/app/modules/home_modules/home/views/home_view.dart';
+import 'package:prime_video_pro/app/modules/mine_modules/mine/views/mine_view.dart';
+import 'package:prime_video_pro/app/modules/search_modules/search/views/search_view.dart';
 
 import '../controllers/main_controller.dart';
 class _NavigationBarItem {

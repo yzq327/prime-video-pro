@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prime_video_pro/app/data/model/video_type_list_model.dart';
 import 'package:prime_video_pro/app/data/service/video_service.dart';
-import 'package:prime_video_pro/app/modules/home/local_widgets/tab_view/tab_content_controller.dart';
+import 'package:prime_video_pro/app/modules/home_modules/home/local_widgets/tab_view/tab_content_controller.dart';
 
 class HomeController extends GetxController with GetTickerProviderStateMixin  {
   //TODO: Implement HomeController

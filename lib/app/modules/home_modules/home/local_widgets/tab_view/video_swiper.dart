@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:prime_video_pro/app/core/values/colors.dart';
 import 'package:prime_video_pro/app/core/values/space_data.dart';
 import 'package:prime_video_pro/app/global_widgets/common_img_display.dart';
-import 'package:prime_video_pro/app/modules/home/local_widgets/tab_view/tab_content_controller.dart';
+import 'package:prime_video_pro/app/modules/home_modules/home/local_widgets/tab_view/tab_content_controller.dart';
 
 
 class VideoSwiper extends StatelessWidget {

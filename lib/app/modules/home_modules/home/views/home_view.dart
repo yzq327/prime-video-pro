@@ -6,8 +6,8 @@ import 'package:prime_video_pro/app/core/theme/text_theme.dart';
 import 'package:prime_video_pro/app/core/values/colors.dart';
 import 'package:prime_video_pro/app/core/values/font_size.dart';
 import 'package:prime_video_pro/app/core/values/space_data.dart';
-import 'package:prime_video_pro/app/modules/home/local_widgets/stub_tab_indicator.dart';
-import 'package:prime_video_pro/app/modules/home/local_widgets/tab_view/tab_content.dart';
+import 'package:prime_video_pro/app/modules/home_modules/home/local_widgets/stub_tab_indicator.dart';
+import 'package:prime_video_pro/app/modules/home_modules/home/local_widgets/tab_view/tab_content.dart';
 
 import '../controllers/home_controller.dart';
 
