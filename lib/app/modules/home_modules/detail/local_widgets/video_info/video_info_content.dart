@@ -54,7 +54,6 @@ class VideoInfoContent extends GetView<DetailController> {
               onTap: () {
                 controller.setCurrentIndex(index);
                 controller.playWithIndex(index);
-
               },
             ),
           ),
@@ -67,15 +66,15 @@ class VideoInfoContent extends GetView<DetailController> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CommonText.mainTitle(controller.getVideoDetail.vodName),
-        GestureDetector(
+        CommonText.mainTitle(controller.getVideoDetail.value!.vodName),
+        Obx(()=> GestureDetector(
           onTap: () => controller.handleOnCollect(context),
           child: Container(
             width: SpaceData.spaceSizeWidth36,
             height: SpaceData.spaceSizeWidth36,
-            child: controller.artboard != null ? Rive(artboard: controller.artboard!) : Container(),
+            child: controller.artboard.value != null ? Rive(artboard: controller.artboard.value!) : Container(),
           ),
-        ),
+        )),
         // ),
       ],
     );
@@ -96,11 +95,11 @@ class VideoInfoContent extends GetView<DetailController> {
             children: [
               CommonText.mainTitle('介绍'),
               SizedBox(height: SpaceData.spaceSizeHeight12),
-              CommonText.normalText('导演：${controller.getVideoDetail.vodDirector}'),
-              CommonText.normalText('主演：${controller.getVideoDetail.vodActor}'),
-              CommonText.normalText('年代：${controller.getVideoDetail.vodYear}'),
-              CommonText.normalText('语言：${controller.getVideoDetail.vodLang}'),
-              CommonText.normalText('介绍：${controller.getVideoDetail.vodContent}',
+              CommonText.normalText('导演：${controller.getVideoDetail.value!.vodDirector}'),
+              CommonText.normalText('主演：${controller.getVideoDetail.value!.vodActor}'),
+              CommonText.normalText('年代：${controller.getVideoDetail.value!.vodYear}'),
+              CommonText.normalText('语言：${controller.getVideoDetail.value!.vodLang}'),
+              CommonText.normalText('介绍：${controller.getVideoDetail.value!.vodContent}',
                   overflow: TextOverflow.visible, textAlign: TextAlign.left),
             ],
           ),

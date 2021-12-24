@@ -167,9 +167,6 @@ class _CommonVideoPlayerState extends State<CommonVideoPlayer> {
   void _toggleFullScreen() {
     setState(() {
       if (_isFullScreen) {
-        // Navigator.push(context, MaterialPageRoute(builder: (context)  {
-        //   return Material(child: build(context),);
-        // }));
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
             overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
         SystemChrome.setPreferredOrientations(

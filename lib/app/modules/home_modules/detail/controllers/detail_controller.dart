@@ -12,7 +12,6 @@ import 'package:prime_video_pro/app/data/table/table_init.dart';
 import 'package:prime_video_pro/app/global_widgets/common_dialog.dart';
 import 'package:prime_video_pro/app/global_widgets/common_toast.dart';
 import 'package:prime_video_pro/app/global_widgets/coomom_video_player.dart';
-import 'package:prime_video_pro/app/modules/home_modules/detail/local_widgets/video_info/video_info_content.dart';
 import 'package:rive/rive.dart';
 
 class VideoDetailPageParams {
@@ -30,46 +29,39 @@ class VideoDetailPageParams {
 
 class DetailController extends GetxController with GetTickerProviderStateMixin  {
   //TODO: Implement DetailController
-
   final VideoService _videoService = Get.find();
   final RxBool isPageLoading = false.obs;
-  final RxBool isCollected = false.obs;
   final RxInt currentSelectCollection = 0.obs;
-
-  late VideoDetail getVideoDetail;
-  TabController? tabController;
-  String? videoUrl;
-  List? urlInfo = [];
-  List<VideoHistoryItem> videoHistoryList = [];
-  late DBUtil dbUtil;
-  String currentEpo = '';
-  late StoreDuration durations;
-  RxBool showSheet = false.obs;
-  List<MyCollectionItem> myCollectionsList = [];
-  List<int> collectedVideoNumbers = [];
-  TextEditingController userEtController = TextEditingController();
-  List<bool> checkBoxStates = [];
-
-  late VideoDetailPageParams videoDetailPageParams;
-
+  final Rx<TabController?> tabController = Rx(null);
+  final Rx<String?> videoUrl = Rx(null);
+  final RxList<MyCollectionItem> myCollectionsList = <MyCollectionItem>[].obs;
+  final RxList<int> collectedVideoNumbers = <int>[].obs;
+  final RxBool showSheet = false.obs;
+  final Rx<TextEditingController> userEtController = TextEditingController().obs;
+  final RxList<bool> checkBoxStates = <bool>[].obs;
+  final RxString currentEpo = ''.obs;
+  final RxBool isCollected = false.obs;
+  final Rx<Artboard?> artboard = Rx(null);
+  final Rx<VideoDetail?> getVideoDetail = Rx(null);
   final RxBool reverse = false.obs;
   final RxInt currentIndex = 0.obs;
 
+  List<VideoHistoryItem> videoHistoryList = [];
+  List? urlInfo = [];
+  late DBUtil dbUtil;
+  late StoreDuration durations;
+  late VideoDetailPageParams videoDetailPageParams;
   RiveAnimationController? _controller1;
   RiveAnimationController? _controller2;
-  Artboard? artboard;
 
-
-  // bool get isFullScreen =>
-  //     MediaQuery.of(context).orientation == Orientation.landscape
 
   bool isFullScreen (context) {
     return MediaQuery.of(context).orientation == Orientation.landscape;
   }
 
   void playWithIndex(int index) {
-    videoUrl = urlInfo![index][1];
-    currentEpo = urlInfo![index][0];
+    videoUrl.value = urlInfo![index][1];
+    currentEpo.value = urlInfo![index][0];
   }
 
 
@@ -77,21 +69,44 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
   void onInit() {
     videoDetailPageParams = Get.arguments;
     super.onInit();
-    tabController = TabController(length: 2, vsync: this);
+    tabController.value = TabController(length: 2, vsync: this);
     _getVideoDetailById();
     initDB();
-    userEtController.addListener(() {
-      // setState(() {});
-    });
-
+    userEtController.value.addListener(() {});
     rootBundle.load('assets/riv/collect.riv').then((data) {
       final file = RiveFile.import(data);
       final tempArtboard = file.mainArtboard;
       tempArtboard.addController(SimpleAnimation(
           isCollected.value ? 'idle_selected' : 'idle_unselected'));
-      artboard = tempArtboard;
+      artboard.value = tempArtboard;
     });
   }
+
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    tabController.value!.dispose();
+    insertData(durations);
+    userEtController.value.dispose();
+    _controller1?.dispose();
+    _controller2?.dispose();
+  }
+
+  // @override
+  // void dispose() {
+  //   tabController.value!.dispose();
+  //   insertData(durations);
+  //   userEtController.value.dispose();
+  //   _controller1?.dispose();
+  //   _controller2?.dispose();
+  //   super.dispose();
+  // }
 
   void _getVideoDetailById() async {
     Map<String, Object> params = {
@@ -99,14 +114,13 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
       'ids': videoDetailPageParams.vodId,
     };
     isPageLoading.value = true;
-    getVideoDetail = await _videoService.getVideoDetailById(params);
-    String vodPlayUrl = getVideoDetail.vodPlayUrl;
+    getVideoDetail.value = await _videoService.getVideoDetailById(params);
+    String vodPlayUrl = getVideoDetail.value!.vodPlayUrl;
     if (vodPlayUrl.isNotEmpty) {
       urlInfo = vodPlayUrl.split('#').map((e) => e.split('\$')).toList();
       playWithIndex(0);
     }
     isPageLoading.value = false;
-    print('getVideoDetail-------${getVideoDetail.vodName}');
   }
 
   void initDB() async {
@@ -124,13 +138,14 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
         .queryList("SELECT * FROM video_play_record ORDER By create_time DESC");
     videoHistoryList = data.map((i) => VideoHistoryItem.fromJson(i)).toList();
     isCollected.value = collectedDate.length > 0;
+    togglePlay();
     await dbUtil.close();
   }
 
   Future<void> insertData(StoreDuration item) async {
     await dbUtil.open();
     List<VideoHistoryItem> searchedList = videoHistoryList
-        .where((element) => element.vodId == getVideoDetail.vodId)
+        .where((element) => element.vodId == getVideoDetail.value!.vodId)
         .toList();
     if (searchedList.length > 0) {
       await dbUtil.update(
@@ -157,13 +172,6 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
     queryData();
   }
 
-  @override
-  void dispose() {
-    tabController!.dispose();
-    insertData(durations);
-    userEtController.dispose();
-    super.dispose();
-  }
 
   void setDurations(StoreDuration item) {
     durations = item;
@@ -178,7 +186,6 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
         checkBoxStates.add(false);
       }
     }
-    // setState(() {});
   }
 
   void initVideoNumbers() async {
@@ -207,7 +214,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
       data = await dbUtil
           .queryList("SELECT * FROM my_collections ORDER By create_time DESC");
     }
-    myCollectionsList =
+    myCollectionsList.value =
         data.map((i) => MyCollectionItem.fromJson(i)).toList();
     initCheckBoxStates();
     initVideoNumbers();
@@ -215,7 +222,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
   }
 
   void insertCollectionData(context) async {
-    if(userEtController.text.trim() == '') {
+    if(userEtController.value.text.trim() == '') {
       CommonToast.show(
           context: context,
           message: "创建失败，不能输入空的文件夹名",
@@ -224,12 +231,12 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
     } else {
       await dbUtil.open();
       List<MyCollectionItem> searchedList = myCollectionsList
-          .where((element) => element.collectName == userEtController.text)
+          .where((element) => element.collectName == userEtController.value.text)
           .toList();
       if (searchedList.length > 0) {
         await dbUtil.update(
             'UPDATE my_collections SET create_time = ? WHERE collect_name = ?',
-            [StringsHelper.getCurrentTimeMillis(), userEtController.text]);
+            [StringsHelper.getCurrentTimeMillis(), userEtController.value.text]);
         CommonToast.show(
             context: context,
             message: "创建失败，文件夹名已存在",
@@ -237,12 +244,12 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
       } else {
         Map<String, Object> par = Map<String, Object>();
         par['create_time'] = StringsHelper.getCurrentTimeMillis();
-        par['collect_name'] = userEtController.text;
+        par['collect_name'] = userEtController.value.text;
         par['img'] = AssetsData.collectionDefaultImg;
         await dbUtil.insertByHelper('my_collections', par);
         CommonToast.show(context: context, message: "创建成功");
       }
-      userEtController.text = '';
+      userEtController.value.text = '';
       await dbUtil.close();
       queryCollectionData();
     }
@@ -259,6 +266,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
     await dbUtil.insertByHelper('collection_detail', par);
     CommonToast.show(context: context, message: "收藏成功");
     isCollected.value = true;
+    togglePlay();
     await dbUtil.close();
   }
 
@@ -268,6 +276,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
         [videoDetailPageParams.vodId]);
     CommonToast.show(context: context, message: "取消收藏成功");
     isCollected.value = false;
+    togglePlay();
     currentSelectCollection.value = 0;
     await dbUtil.close();
   }
@@ -289,21 +298,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
   void setReverse() => reverse.value = !reverse.value;
   void setCurrentIndex(index) => currentIndex.value = index;
 
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-    _controller1?.dispose();
-    _controller2?.dispose();
-  }
-
-
-  void _togglePlay() {
+  void togglePlay() {
     if (isCollected.value) {
       doSelect();
     } else {
@@ -313,23 +308,17 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
 
   void doSelect() {
     if (_controller1 != null) {
-      artboard?.removeController(_controller1!);
+      artboard.value?.removeController(_controller1!);
     }
     _controller1 = SimpleAnimation('selected');
-    artboard?.addController(_controller1!);
+    artboard.value?.addController(_controller1!);
   }
 
   void doUnSelect() {
     if (_controller2 != null) {
-      artboard?.removeController(_controller2!);
+      artboard.value?.removeController(_controller2!);
     }
     _controller2 = SimpleAnimation('unselected');
-    artboard?.addController(_controller2!);
+    artboard.value?.addController(_controller2!);
   }
-
-  // void didUpdateWidget(covariant VideoInfoContent oldWidget) {
-  //   if (widget.isCollected != oldWidget.isCollected) {
-  //     _togglePlay();
-  //   }
-  // }
 }
