@@ -32,13 +32,10 @@ class CommonImgDisplay extends StatelessWidget {
           Get.toNamed(Routes.DETAIL,
               arguments: VideoDetailPageParams(
                   vodId: vodId, vodName: vodName, vodPic: vodPic));
-          // Navigator.pushNamed(context, Routes.detail, arguments: VideoDetailPageParams(vodId: vodId, vodName: vodName, vodPic: vodPic));
         } else {
           Get.offAndToNamed(Routes.DETAIL,
               arguments: VideoDetailPageParams(
                   vodId: vodId, vodName: vodName, vodPic: vodPic));
-          // Navigator.pushReplacementNamed(context, Routes.detail,
-          //     arguments: VideoDetailPageParams(vodId: vodId, vodName: vodName));
         }
       },
     );

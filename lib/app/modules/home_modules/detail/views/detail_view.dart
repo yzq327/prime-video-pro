@@ -12,6 +12,7 @@ import 'package:prime_video_pro/app/global_widgets/common_hint_text_contain.dart
 import 'package:prime_video_pro/app/global_widgets/common_toast.dart';
 import 'package:prime_video_pro/app/global_widgets/coomom_video_player.dart';
 import 'package:prime_video_pro/app/global_widgets/create_collect_dialog.dart';
+import 'package:prime_video_pro/app/modules/home_modules/detail/local_widgets/video_info/same_type_video_content.dart';
 import 'package:prime_video_pro/app/modules/home_modules/detail/local_widgets/video_info/video_info_content.dart';
 import 'package:prime_video_pro/app/modules/home_modules/home/local_widgets/stub_tab_indicator.dart';
 
@@ -245,15 +246,7 @@ class DetailView extends GetView<DetailController> {
                               controller: controller.tabController.value,
                               children: [
                             VideoInfoContent(),
-                            CommonText.mainTitle('text'),
-                            // VideoInfoContent(
-                            //   getVideoDetail: getVideoDetail,
-                            //   urlInfo: urlInfo,
-                            //   onChanged: _playWithIndex,
-                            //   isCollected: isCollected,
-                            //   onCollected: handleOnCollect(context),
-                            // ),
-                            // SameTypeVideoContent(getVideoDetail: getVideoDetail),
+                            SameTypeVideoContent(controller: controller.sameTypeVideoController.value!),
                           ])),
                     ],
                   ),

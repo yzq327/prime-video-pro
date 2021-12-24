@@ -12,6 +12,7 @@ import 'package:prime_video_pro/app/data/table/table_init.dart';
 import 'package:prime_video_pro/app/global_widgets/common_dialog.dart';
 import 'package:prime_video_pro/app/global_widgets/common_toast.dart';
 import 'package:prime_video_pro/app/global_widgets/coomom_video_player.dart';
+import 'package:prime_video_pro/app/modules/home_modules/detail/local_widgets/video_info/same_type_video_controller.dart';
 import 'package:rive/rive.dart';
 
 class VideoDetailPageParams {
@@ -45,6 +46,9 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
   final Rx<VideoDetail?> getVideoDetail = Rx(null);
   final RxBool reverse = false.obs;
   final RxInt currentIndex = 0.obs;
+  // final RxList<SameTypeVideoController> sameTypeVideoControllerList = <SameTypeVideoController>[].obs;
+  final Rx<SameTypeVideoController?> sameTypeVideoController =Rx(null);
+
 
   List<VideoHistoryItem> videoHistoryList = [];
   List? urlInfo = [];
@@ -68,7 +72,6 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
   @override
   void onInit() {
     videoDetailPageParams = Get.arguments;
-    super.onInit();
     tabController.value = TabController(length: 2, vsync: this);
     _getVideoDetailById();
     initDB();
@@ -80,6 +83,7 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
           isCollected.value ? 'idle_selected' : 'idle_unselected'));
       artboard.value = tempArtboard;
     });
+    super.onInit();
   }
 
 
@@ -114,7 +118,23 @@ class DetailController extends GetxController with GetTickerProviderStateMixin  
       'ids': videoDetailPageParams.vodId,
     };
     isPageLoading.value = true;
-    getVideoDetail.value = await _videoService.getVideoDetailById(params);
+    List<VideoDetail> model =  await _videoService.getVideoDetailById(params);
+    // sameTypeVideoControllerList.assignAll(
+    //     List.generate(model.length, (index) {
+    //       return SameTypeVideoController(model[index]);
+    //     })
+    // );
+    // sameTypeVideoControllerList[0].onRefresh();
+    // tabController.value = TabController(length: 2, vsync: this)
+    //   ..addListener(() {
+    //     sameTypeVideoControllerList[tabController.value!.index].onRefresh();
+    //   });
+
+    getVideoDetail.value = model[0];
+    // getVideoDetail.value = await _videoService.getVideoDetailById(params);
+    //
+    sameTypeVideoController.value = SameTypeVideoController(getVideoDetail.value);
+    sameTypeVideoController.value!.onRefresh();
     String vodPlayUrl = getVideoDetail.value!.vodPlayUrl;
     if (vodPlayUrl.isNotEmpty) {
       urlInfo = vodPlayUrl.split('#').map((e) => e.split('\$')).toList();

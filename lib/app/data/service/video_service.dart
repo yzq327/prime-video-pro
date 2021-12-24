@@ -19,9 +19,15 @@ class VideoService {
     return model;
   }
 
-  Future<VideoDetail> getVideoDetailById( Map<String, dynamic>? queryParameters) async {
+  // Future<VideoDetail> getVideoDetailById( Map<String, dynamic>? queryParameters) async {
+  //   final res = await  _httpProvider.get(HttpOptions.baseUrl, queryParameters: queryParameters);
+  //   VideoDetailListModel model = VideoDetailListModel.fromJson(res.data);
+  //   return model.list[0];
+  // }
+
+  Future<List<VideoDetail>> getVideoDetailById( Map<String, dynamic>? queryParameters) async {
     final res = await  _httpProvider.get(HttpOptions.baseUrl, queryParameters: queryParameters);
     VideoDetailListModel model = VideoDetailListModel.fromJson(res.data);
-    return model.list[0];
+    return model.list;
   }
 }
