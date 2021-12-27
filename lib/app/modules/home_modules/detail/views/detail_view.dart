@@ -34,7 +34,7 @@ class DetailView extends GetView<DetailController> {
     return controller.isFullScreen(context)
         ? SizedBox()
         : Obx(() => TabBar(
-              controller: controller.tabController.value,
+              controller: controller.tabController.value!,
               labelStyle: TextStyle(fontSize: FontSizes.fontSize20),
               padding: EdgeInsets.only(
                 bottom: SpaceData.spaceSizeHeight16,

@@ -47,33 +47,44 @@ class SameTypeVideoContent extends StatelessWidget {
                 SizedBox(width: SpaceData.spaceSizeWidth18),
                 Expanded(
                   child: Obx(() => GestureDetector(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CommonText.text18(
-                                controller.getVideoList[index].vodName),
-                            SizedBox(
-                              height: SpaceData.spaceSizeHeight8,
-                            ),
-                            CommonText.text18(
-                                "评分：${controller.getVideoList[index].vodScore}",
-                                color: SystemColors.subTextColor),
-                            SizedBox(
-                              height: SpaceData.spaceSizeHeight8,
-                            ),
-                            CommonText.text14(
-                                "上线年份： ${controller.getVideoList[index].vodYear}",
-                                color: SystemColors.hoverThemeBgColor),
-                          ],
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CommonText.text18(
+                                  controller.getVideoList[index].vodName),
+                              SizedBox(
+                                height: SpaceData.spaceSizeHeight8,
+                              ),
+                              CommonText.text18(
+                                  "评分：${controller.getVideoList[index].vodScore}",
+                                  color: SystemColors.subTextColor),
+                              SizedBox(
+                                height: SpaceData.spaceSizeHeight8,
+                              ),
+                              CommonText.text14(
+                                  "上线年份： ${controller.getVideoList[index].vodYear}",
+                                  color: SystemColors.hoverThemeBgColor),
+                            ],
+                          ),
                         ),
                         onTap: () {
-                          Get.offAndToNamed(Routes.DETAIL,
-                              arguments: VideoDetailPageParams(
+                          controller.onVideoDetailPageParamsChanged(
+                              VideoDetailPageParams(
                                   vodId: controller.getVideoList[index].vodId,
                                   vodName:
                                       controller.getVideoList[index].vodName,
                                   vodPic:
                                       controller.getVideoList[index].vodPic));
+                          // Get.offNamed(Routes.DETAIL,
+                          //     preventDuplicates: false,
+                          //     arguments: VideoDetailPageParams(
+                          //         vodId: controller.getVideoList[index].vodId,
+                          //         vodName:
+                          //             controller.getVideoList[index].vodName,
+                          //         vodPic:
+                          //             controller.getVideoList[index].vodPic));
                         },
                       )),
                 )

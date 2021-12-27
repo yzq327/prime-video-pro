@@ -1,16 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:prime_video_pro/app/data/model/video_detail_list_model.dart';
 import 'package:prime_video_pro/app/data/model/video_list_model.dart';
 import 'package:prime_video_pro/app/data/service/video_service.dart';
+import 'package:prime_video_pro/app/modules/home_modules/detail/controllers/detail_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SameTypeVideoController extends GetxController{
-  final  VideoDetail? getVideoDetail;
+  late  VideoDetail? getVideoDetail;
   final RxBool isLoading = false.obs;
   final VideoService _videoService = Get.find();
   final RxList<RefreshController> RefreshControllerList = <RefreshController>[].obs;
   final Rx<RefreshController> refreshController = RefreshController().obs;
-  SameTypeVideoController(this.getVideoDetail);
+  final ValueChanged<VideoDetailPageParams> onVideoDetailPageParamsChanged;
+  SameTypeVideoController(this.onVideoDetailPageParamsChanged);
   RxList<VideoInfo> getVideoList = <VideoInfo>[].obs;
 
   int total = 0;
@@ -47,10 +50,11 @@ class SameTypeVideoController extends GetxController{
   bool get enablePullUp {
     return getVideoList.length != total - 1;
   }
-
+  void setVideoDetail(VideoDetail _getVideoDetail) {
+    getVideoDetail = _getVideoDetail;
+  }
 
   void onRefresh() async {
-    print('???');
     currentPage = 1;
     await _getVideoTypeList();
     refreshController.value.refreshCompleted();
